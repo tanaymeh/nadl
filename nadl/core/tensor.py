@@ -1,5 +1,6 @@
 import numpy as np
 from functools import partialmethod
+from numpy.lib.arraysetops import isin
 
 from numpy.lib.function_base import gradient
 
@@ -17,7 +18,7 @@ class Tensor:
 
         self.grad = 0
         self._prev = set(_children)
-        # self._op = _op
+        self._op = _op
 
     @property
     def shape(self):
@@ -69,4 +70,40 @@ class Tensor:
         output._backward = _backward
 
         return output
-            
+
+    def __mul__(self, scalar):
+        """
+        Multiplication using the " * " operator is only supported for a Tensor and a scalar value
+        To multiply a Tensor with a Tensor, use the "tensor1.dot(tensor2)" method.
+        """
+        assert isinstance(scalar, (int, float, bool)), "Only multiplication with a scalar value is supported using '*' operator.\nFor Multiplication with a vector, use the '.dot()' function."
+        
+        output = Tensor(data=self.data * scalar, _children=(self,), _op='*')
+        return output
+    
+    def __div__(self, tensor):
+        raise NotImplementedError("Division Operation is currently not implemented.")
+
+    def __pow__(self, scalar):
+        """
+        Only raise to scalar powers
+        """
+        assert isin(scalar, (int, float)), "Only int/float powers are allowed."
+
+        output = Tensor(self.data ** scalar, _children=(self,), _op=f"^{scalar}")
+
+        def _backward():
+            self.grad += (scalar * self.data ** (scalar - 1)) * output
+        output._backward = _backward
+
+        return output
+    
+    def relu(self):
+        __check = 0 if self.data < 0 else self.data
+        output = Tensor(data=__check, _children=(self), _op='ReLU')
+
+        def _backward():
+            self.grad += (output.data > 0) * output.grad
+        output._backward = _backward
+
+        return output

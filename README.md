@@ -1,4 +1,4 @@
-<div style="text-align:center">Naive Automatic Differentiation Library - NADL</div>
+<center> Naive Automatic Differentiation Library - NADL </center>
 
 A small Automatic Differentiation Library written in python that can be used to perform graphed automatic diff in reverse mode.
 

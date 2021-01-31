@@ -1,6 +1,8 @@
 import numpy as np
 from functools import partialmethod
 
+from numpy.lib.function_base import gradient
+
 class Tensor:
     """
     Core Tensor Class.
@@ -13,7 +15,7 @@ class Tensor:
         self.data = data
         self.requires_grad = requires_grad
 
-        self.grad = None
+        self.grad = 0
         self._prev = set(_children)
         # self._op = _op
 
@@ -54,3 +56,17 @@ class Tensor:
         Experimental function - only for internal workings.
         """
         return self.data
+    
+    def __add__(self, tensor):
+        if not isinstance(tensor, Tensor):
+            tensor = Tensor(data=tensor)
+        
+        output = Tensor(data=self.data+tensor.data, _children=(self, tensor), _op='+')
+
+        def _backward():
+            self.grad += output.grad
+            tensor.grad += output.grad
+        output._backward = _backward
+
+        return output
+            

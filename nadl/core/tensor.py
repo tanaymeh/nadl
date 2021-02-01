@@ -1,8 +1,11 @@
+# Append system path (why lol?)
+import sys
+sys.path.append('/home/heytanay/Desktop/nadl/nadl/other')
 import numpy as np
 from functools import partialmethod
-from numpy.lib.arraysetops import isin
+# from other.pathappend import appendPaths
 
-from numpy.lib.function_base import gradient
+# appendPaths()
 
 class Tensor:
     """
@@ -16,7 +19,7 @@ class Tensor:
         self.data = data
         self.requires_grad = requires_grad
 
-        self.grad = 0
+        self.grad = np.zeros_like(self.data)
         self._prev = set(_children)
         self._op = _op
 
@@ -88,7 +91,7 @@ class Tensor:
         """
         Only raise to scalar powers
         """
-        assert isin(scalar, (int, float)), "Only int/float powers are allowed."
+        assert isinstance(scalar, (int, float)), "Only int/float powers are allowed."
 
         output = Tensor(self.data ** scalar, _children=(self,), _op=f"^{scalar}")
 
@@ -107,3 +110,31 @@ class Tensor:
         output._backward = _backward
 
         return output
+
+    def dot(self, tensor):
+        output = Tensor(data=self.data.dot(tensor.data))
+
+        def _backward():
+            self.grad += self.grad.dot(tensor.data)
+            tensor.grad += self.grad.T.dot(self.data).T
+        output._backward = _backward
+        
+        return output
+
+    def backward(self):
+        """
+        Core class that will perform the backward propagation
+        """
+        topology = []
+        visited = set()
+        def build_topo(v):
+            if v not in visited:
+                visited.add(v)
+                for child in v._prev:
+                    build_topo(v)
+                topology.append(v)
+        build_topo(self)
+
+        self.grad = np.ones_like(self.data)
+        for v in reversed(topology):
+            v._backward()

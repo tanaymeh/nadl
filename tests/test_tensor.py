@@ -16,5 +16,30 @@ try:
     print(c)
     print(d)
 
+    print(f"{'='*20} Running Intermediate Checks {'='*20}")
+    set_value = np.array([[10, 20, 30], [40, 50, 60]])
+    e = Tensor(data=set_value)
+    f = Tensor.ones_like(e)
+    g = e * 1
+    h = e * 7
+    i = e + f
+    for x_temp in [e, f, g, h, i]:
+        print(f"{x_temp}")
+    print(e.data)
+    print(f.data)
+    print(h.data)
+    print(i.data)
+
+    i.backward()
+    print(e.grad)
+    print(f.grad)
+    print(i.grad)
+    
+    print(f"{'='*20} Running Advanced Checks {'='*20}")
+    e = Tensor(data=set_value)
+    k = e.dot(Tensor(data=e.data.T))
+    k.backward()
+    print(e.gradient)
+
 except Exception as e:
     print(e)

@@ -1,5 +1,5 @@
 import numpy as np
-from functools import partialmethod
+from ..core.ops import BasicOps
 
 class Tensor:
     """
@@ -97,30 +97,17 @@ class Tensor:
         return output
     
     def relu(self):
-        __check = 0 if self.data < 0 else self.data
-        output = Tensor(data=__check, _children=(self), _op='ReLU')
-
-        def _backward():
-            self.grad += (output.data > 0) * output.grad
-        output._backward = _backward
-
+        """
+        Upper-level abstraction for ReLU
+        """
+        output = BasicOps.relu(tensor1=self, dataType=Tensor)
         return output
 
     def matmul(self, tensor):
-        try:
-            output = Tensor(data=np.matmul(self.data, tensor.data))
-        except:
-            raise RuntimeError(f"Invalid Matrix Multiplication, {self.data.shape} is not compatible with {tensor.data.shape}")
-
-        def _backward():
-            new_self_grad = np.matmul(output.grad, tensor.data.T)
-            new_tensor_grad = np.matmul(self.data.T, output.grad)
-            self.grad = new_self_grad
-            tensor.grad = new_tensor_grad
-            # np.add(self.grad, new_self_grad, out=self.grad, casting='unsafe')
-            # np.add(tensor.grad, new_tensor_grad, out=tensor.grad, casting='unsafe')
-        output._backward = _backward
-        
+        """
+        Upper-level abstraction for the matrix multiplication function
+        """
+        output = BasicOps.matmul(tensor1=self, tensor2=tensor, dataType=Tensor)
         return output
 
     def backward(self):

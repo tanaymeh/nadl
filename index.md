@@ -5,7 +5,7 @@
 [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/heytanay/nadl/blob/main/LICENSE)
 
 
-A little Automatic Differentiation (**read: DEEP LEARNING**) that I wrote in Python using only numpy (for doing linear algebra with ease).
+A little Automatic Differentiation (read: DEEP LEARNING) library that I wrote in Python using only numpy (for doing linear algebra with ease).
 
 This framework can do everything (as long as calculating gradients is concerned) that any other big framework out there can do.
 

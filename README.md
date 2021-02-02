@@ -40,7 +40,7 @@ numpy_init2 = np.random.randn(5,3).astype('float32')
 b = Tensor(data=numpy_init2, requires_grad=True)
 
 # Do some Operations on them
-c = tensor1.matmul(tensor2)
+c = a.matmul(b)
 
 # Do Backward Propagation to calculate the gradients
 c.backward()

@@ -50,7 +50,7 @@ class Tensor:
         """
         Returns a Tensor full of Random Numbers with the same shape as the provided tensor
         """
-        return cls(data=np.random.random(size=tensor.shape))
+        return cls(data=np.random.rand(*tensor.shape))
 
     def __repr__(self):
         return f"Tensor<shape={self.shape}, dtype={self.dtype}>"
@@ -68,8 +68,8 @@ class Tensor:
         output = Tensor(data=self.data+tensor.data, _children=(self, tensor), _op='+')
 
         def _backward():
-            self.grad += output.grad
-            tensor.grad += output.grad
+            self.grad += np.matmul(output.grad, tensor.data.T)
+            tensor.grad += np.matmul(self.data.T, output.grad)
         output._backward = _backward
 
         return output
@@ -111,12 +111,19 @@ class Tensor:
 
         return output
 
-    def dot(self, tensor):
-        output = Tensor(data=self.data.dot(tensor.data))
+    def matmul(self, tensor):
+        try:
+            output = Tensor(data=np.matmul(self.data, tensor.data))
+        except:
+            raise RuntimeError(f"Invalid Matrix Multiplication, {self.data.shape} is not compatible with {tensor.data.shape}")
 
         def _backward():
-            self.grad += self.grad.dot(tensor.data)
-            tensor.grad += self.grad.T.dot(self.data).T
+            new_self_grad = np.matmul(output.grad, tensor.data.T)
+            new_tensor_grad = np.matmul(self.data.T, output.grad)
+            self.grad = new_self_grad
+            tensor.grad = new_tensor_grad
+            # np.add(self.grad, new_self_grad, out=self.grad, casting='unsafe')
+            # np.add(tensor.grad, new_tensor_grad, out=tensor.grad, casting='unsafe')
         output._backward = _backward
         
         return output

@@ -1,4 +1,4 @@
 numpy
 tqdm
 pytest
-tensorflow
+tensorflow==2.4.0

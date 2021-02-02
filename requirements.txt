@@ -1,4 +1,4 @@
 numpy
 tqdm
 pytest
-tensorflow==2.4.0
+https://files.pythonhosted.org/packages/c2/14/3724e7316a065b79174b10e34471e21ebb6896efbb82f689651584e6f5da/tensorflow-2.4.1-cp36-cp36m-manylinux2010_x86_64.whl

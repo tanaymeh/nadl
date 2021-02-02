@@ -5,6 +5,7 @@ class Tensor:
     """
     Core Tensor Class.
     This is the building block of this mini-framework.
+    For simplicity, I am using Numpy as a back-end for linear algebra ops
     """
     def __init__(self, data: np.ndarray, requires_grad: bool=True, _children: tuple=(), _op: str=''):
         if not isinstance(data, np.ndarray):

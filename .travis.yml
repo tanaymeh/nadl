@@ -5,9 +5,7 @@ python:
   - "pypy3"  # currently Python 3.6.1,  PyPy 7.1.1-beta0
 # command to install dependencies
 install:
-  - pip3 install numpy
-  - pip3 install tqdm
-  - pip3 install pytest
-  - pip3 install tensorflow
+  - pip install -r requirements.txt
+  - pip install .
 # command to run tests
 script: python3 -m pytest

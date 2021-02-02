@@ -1,6 +1,8 @@
+import sys
+sys.path.append("../")
 import numpy as np
 import tensorflow as tf
-from ..nadl.core.tensor import Tensor
+from nadl.core.tensor import Tensor
 
 print(f"{'='*20} Running Basic Checks {'='*20}")
 

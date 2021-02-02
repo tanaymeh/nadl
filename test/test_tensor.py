@@ -1,7 +1,6 @@
-# import sys
-# sys.path.append("/home/heytanay/Desktop/nadl/nadl/core")
-
-from ..nadl.core.tensor import Tensor
+import sys
+sys.path.append("../")
+from nadl.core.tensor import Tensor
 import unittest
 import numpy as np
 import tensorflow as tf

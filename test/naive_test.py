@@ -1,9 +1,6 @@
-import sys
-sys.path.append("/home/heytanay/Desktop/nadl/nadl/core")
-
 import numpy as np
 import tensorflow as tf
-from tensor import Tensor
+from ..nadl.core.tensor import Tensor
 
 print(f"{'='*20} Running Basic Checks {'='*20}")
 

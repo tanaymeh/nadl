@@ -1,8 +1,5 @@
 import numpy as np
 from functools import partialmethod
-# from pathutils import appendPaths
-
-# appendPaths()
 
 class Tensor:
     """

@@ -1,11 +1,8 @@
-# Append system path (why lol?)
-import sys
-sys.path.append('/home/heytanay/Desktop/nadl/nadl/other')
 import numpy as np
 from functools import partialmethod
-# from other.pathappend import appendPaths
+from pathutils import appendPaths
 
-# appendPaths()
+appendPaths()
 
 class Tensor:
     """
@@ -68,8 +65,8 @@ class Tensor:
         output = Tensor(data=self.data+tensor.data, _children=(self, tensor), _op='+')
 
         def _backward():
-            self.grad += np.matmul(output.grad, tensor.data.T)
-            tensor.grad += np.matmul(self.data.T, output.grad)
+            self.grad += output.grad
+            tensor.grad += output.grad
         output._backward = _backward
 
         return output

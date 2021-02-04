@@ -26,8 +26,7 @@ def test_tf():
     t2_grad = gr.gradient(out, t2)
 
     return out.numpy(), t1_grad.numpy(), t2_grad.numpy()
-
-
+    
 
 class TestNADL(unittest.TestCase):
     def tensor_tests():    

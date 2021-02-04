@@ -1,10 +1,11 @@
 # Non-Overloaded function will be here
 import numpy as np
+from ..other.utils import Utils
 
-class BasicOps:
+class HiddenOps:
     def matmul(tensor1, tensor2, dataType):
         """
-        Hidden Matrix Multiplication functions that will be called in the main tensor.py file
+        Hidden Matrix Multiplication function that will be called in the main tensor.py file
         """
         try:
             output = dataType(data=np.matmul(tensor1.data, tensor2.data))
@@ -12,6 +13,8 @@ class BasicOps:
             raise RuntimeError(f"Invalid Matrix Multiplication, {tensor1.data.shape} is not compatible with {tensor2.data.shape}")
 
         def _backward():
+            __grad_check = Utils.checkGradDep(tensor1, tensor2)
+            if not __grad_check: raise RuntimeError("Cannot perform backward propagation on a Static Tensor")
             new_self_grad = np.matmul(output.grad, tensor2.data.T)
             new_tensor_grad = np.matmul(tensor1.data.T, output.grad)
             tensor1.grad = new_self_grad
@@ -26,6 +29,9 @@ class BasicOps:
         output = dataType(data=check, _children=(tensor1), _op='ReLU')
 
         def _backward():
+            __grad_check = Utils.checkGradDep(tensor1)
+            if not __grad_check: raise RuntimeError("Cannot perform backward propagation on a Static Tensor")
+    
             tensor1.grad += (output.data > 0) * output.grad
         output._backward = _backward
 

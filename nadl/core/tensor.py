@@ -1,11 +1,11 @@
 import numpy as np
-from ..core.ops import BasicOps
+from ..core.ops import HiddenOps
+from ..other.utils import Utils
 
 class Tensor:
     """
-    Core Tensor Class.
-    This is the building block of this mini-framework.
-    For simplicity, I am using Numpy as a back-end for linear algebra ops
+    Core Tensor Class
+    This class will be responsible for all the heavy lifting.
     """
     def __init__(self, data: np.ndarray, requires_grad: bool=True, _children: tuple=(), _op: str=''):
         if not isinstance(data, np.ndarray):
@@ -18,14 +18,36 @@ class Tensor:
         self._prev = set(_children)
         self._op = _op
 
+    def experimental_set_data(self, new_data):
+        """
+        Explicitly change the data of an already initialized Tensor.
+        This will reset all the gradients back to 0
+        """
+        self.data = new_data
+        self.grad = np.zeros_like(self.data)
+
     @property
     def shape(self):
+        """
+        Returns the shape of the Tensor
+        """
         return self.data.shape
     
     @property
     def dtype(self):
+        """
+        Returns the data of the Tensor
+        """
         return self.data.dtype
     
+    @property
+    def numpy(self):
+        """
+        Returns the data of the tensor in a numpy array.
+        Use this method to retrieve the data
+        """
+        return np.array(self.data)
+
     @classmethod
     def ones_like(cls, tensor):
         """
@@ -48,21 +70,25 @@ class Tensor:
         return cls(data=np.random.rand(*tensor.shape))
 
     def __repr__(self):
+        """
+        Returns the string representation of a Tensor
+        """
         return f"Tensor<shape={self.shape}, dtype={self.dtype}>"
 
-    def __get_data(self):
-        """
-        Experimental function - only for internal workings.
-        """
-        return self.data
-    
     def __add__(self, tensor):
+        """
+        Overloaded function for "add" operator.
+        Use na_ops.add() instead
+        """
         if not isinstance(tensor, Tensor):
             tensor = Tensor(data=tensor)
         
         output = Tensor(data=self.data+tensor.data, _children=(self, tensor), _op='+')
 
         def _backward():
+            __grad_check = Utils.checkGradDep(self, tensor)
+            if not __grad_check: raise RuntimeError("Cannot perform backward propagation on a Static Tensor")
+
             self.grad += output.grad
             tensor.grad += output.grad
         output._backward = _backward
@@ -73,6 +99,8 @@ class Tensor:
         """
         Multiplication using the " * " operator is only supported for a Tensor and a scalar value
         To multiply a Tensor with a Tensor, use the "tensor1.dot(tensor2)" method.
+
+        Use na_ops.smul()
         """
         assert isinstance(scalar, (int, float, bool)), "Only multiplication with a scalar value is supported using '*' operator.\nFor Multiplication with a vector, use the '.dot()' function."
         
@@ -85,12 +113,17 @@ class Tensor:
     def __pow__(self, scalar):
         """
         Only raise to scalar powers
+
+        Use na_ops.spow() instead
         """
         assert isinstance(scalar, (int, float)), "Only int/float powers are allowed."
 
         output = Tensor(self.data ** scalar, _children=(self,), _op=f"^{scalar}")
 
         def _backward():
+            __grad_check = Utils.checkGradDep(self)
+            if not __grad_check: raise RuntimeError("Cannot perform backward propagation on a Static Tensor")
+
             self.grad += (scalar * self.data ** (scalar - 1)) * output
         output._backward = _backward
 
@@ -99,20 +132,24 @@ class Tensor:
     def relu(self):
         """
         Upper-level abstraction for ReLU
+
+        Use na_ops.activations.relu() instead
         """
-        output = BasicOps.relu(tensor1=self, dataType=Tensor)
+        output = HiddenOps.relu(tensor1=self, dataType=Tensor)
         return output
 
     def matmul(self, tensor):
         """
         Upper-level abstraction for the matrix multiplication function
+
+        Use na_ops.matmul() instead
         """
-        output = BasicOps.matmul(tensor1=self, tensor2=tensor, dataType=Tensor)
+        output = HiddenOps.matmul(tensor1=self, tensor2=tensor, dataType=Tensor)
         return output
 
     def backward(self):
         """
-        Core class that will perform the backward propagation
+        This function will perform the backward propagation
         """
         topology = []
         visited = set()

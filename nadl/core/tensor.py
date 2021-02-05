@@ -116,6 +116,7 @@ class Tensor:
 
         Use na_ops.spow() instead
         """
+        raise NotImplementedError("Power function is broken, please use explicit methods. Sorry : (")
         assert isinstance(scalar, (int, float)), "Only int/float powers are allowed."
 
         output = Tensor(self.data ** scalar, _children=(self,), _op=f"^{scalar}")

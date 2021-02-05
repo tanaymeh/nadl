@@ -6,7 +6,6 @@
 [![Build Status](https://travis-ci.com/heytanay/nadl.svg?branch=main)](https://travis-ci.com/heytanay/nadl)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/heytanay/nadl/blob/main/LICENSE)
-[![HitCount](http://hits.dwyl.com/heytanay/nadl.svg)](http://hits.dwyl.com/heytanay/nadl)
 
 A little Automatic Differentiation (**read: DEEP LEARNING**) library that I wrote in Python using only numpy (for doing linear algebra with ease).
 

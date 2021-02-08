@@ -3,12 +3,12 @@ import numpy as np
 from ..other.utils import Utils
 
 class HiddenOps:
-    def matmul(tensor1, tensor2, dataType):
+    def matmul(tensor1, tensor2, TensorDataTypeWrapper):
         """
         Hidden Matrix Multiplication function that will be called in the main tensor.py file
         """
         try:
-            output = dataType(data=np.matmul(tensor1.data, tensor2.data))
+            output = TensorDataTypeWrapper(data=np.matmul(tensor1.data, tensor2.data))
         except:
             raise RuntimeError(f"Invalid Matrix Multiplication, {tensor1.data.shape} is not compatible with {tensor2.data.shape}")
 
@@ -24,15 +24,33 @@ class HiddenOps:
         output._backward = _backward
         return output
     
-    def relu(tensor1, dataType):
+    def relu(tensor1, TensorDataTypeWrapper):
+        """
+        Internal relu function code that will be invoked when calling on a tensor object
+        """
         check = 0 if tensor1.data < 0 else tensor1.data
-        output = dataType(data=check, _children=(tensor1), _op='ReLU')
+        output = TensorDataTypeWrapper(data=check, _children=(tensor1), _op='ReLU')
 
         def _backward():
             __grad_check = Utils.checkGradDep(tensor1)
             if not __grad_check: raise RuntimeError("Cannot perform backward propagation on a Static Tensor")
     
             tensor1.grad += (output.data > 0) * output.grad
+        output._backward = _backward
+
+        return output
+    
+    def tensor_sum(tensor, TensorDataTypeWrapper):
+        """
+        Returns the sum of all elements of a Tensor in a new Tensor
+        """
+        output = TensorDataTypeWrapper(data=tensor.numpy.sum())
+
+        def _backward():
+            __grad_check = Utils.checkGradDep(tensor)
+            if not __grad_check: raise RuntimeError("Cannot perform backward propagation on a Static Tensor")
+            
+            tensor.grad = tensor.grad * np.ones_like(tensor.numpy)
         output._backward = _backward
 
         return output

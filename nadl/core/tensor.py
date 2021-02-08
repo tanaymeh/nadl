@@ -136,7 +136,7 @@ class Tensor:
 
         Use na_ops.activations.relu() instead
         """
-        output = HiddenOps.relu(tensor1=self, dataType=Tensor)
+        output = HiddenOps.relu(tensor1=self, TensorDataTypeWrapper=Tensor)
         return output
 
     def matmul(self, tensor):
@@ -145,7 +145,14 @@ class Tensor:
 
         Use na_ops.matmul() instead
         """
-        output = HiddenOps.matmul(tensor1=self, tensor2=tensor, dataType=Tensor)
+        output = HiddenOps.matmul(tensor1=self, tensor2=tensor, TensorDataTypeWrapper=Tensor)
+        return output
+    
+    def sum(self):
+        """
+        Upper-level abstraction for Tensor sum function
+        """
+        output = HiddenOps.tensor_sum(tensor1=self, TensorDataTypeWrapper=Tensor)
         return output
 
     def backward(self):

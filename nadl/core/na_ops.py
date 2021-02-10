@@ -5,6 +5,7 @@ just calling an Operator that you can use on any datatype
 """
 import numpy as np
 from ..core.tensor import Tensor
+from ..core.ops import HiddenOps
 from ..other.utils import Utils
 from typing import Union
 

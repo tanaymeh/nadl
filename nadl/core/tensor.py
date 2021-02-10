@@ -113,21 +113,8 @@ class Tensor:
     def __pow__(self, scalar):
         """
         Only raise to scalar powers
-
-        Use na_ops.spow() instead
         """
-        raise NotImplementedError("Power function is broken, please use explicit methods. Sorry : (")
-        assert isinstance(scalar, (int, float)), "Only int/float powers are allowed."
-
-        output = Tensor(self.data ** scalar, _children=(self,), _op=f"^{scalar}")
-
-        def _backward():
-            __grad_check = Utils.checkGradDep(self)
-            if not __grad_check: raise RuntimeError("Cannot perform backward propagation on a Static Tensor")
-
-            self.grad += (scalar * self.data ** (scalar - 1)) * output
-        output._backward = _backward
-
+        output = HiddenOps.power(tensor=self, power=scalar, TensorDataTypeWrapper=Tensor)
         return output
     
     def relu(self):
@@ -158,6 +145,9 @@ class Tensor:
     def backward(self):
         """
         This function will perform the backward propagation
+
+        Recursively visit all the nodes in the graph and then call the backward function on
+        the node which we want the gradient off.
         """
         topology = []
         visited = set()

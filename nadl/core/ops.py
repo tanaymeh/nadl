@@ -1,6 +1,7 @@
 # Non-Overloaded function will be here
 import numpy as np
 from ..other.utils import Utils
+from typing import Union
 
 class HiddenOps:
     def matmul(tensor1, tensor2, TensorDataTypeWrapper):
@@ -15,10 +16,12 @@ class HiddenOps:
         def _backward():
             __grad_check = Utils.checkGradDep(tensor1, tensor2)
             if not __grad_check: raise RuntimeError("Cannot perform backward propagation on a Static Tensor")
+            
             new_self_grad = np.matmul(output.grad, tensor2.data.T)
             new_tensor_grad = np.matmul(tensor1.data.T, output.grad)
             tensor1.grad = new_self_grad
             tensor2.grad = new_tensor_grad
+
             # np.add(tensor1.grad, new_self_grad, out=tensor1.grad, casting='unsafe')
             # np.add(tensor2.grad, new_tensor_grad, out=tensor2.grad, casting='unsafe')
         output._backward = _backward
@@ -54,3 +57,18 @@ class HiddenOps:
         output._backward = _backward
 
         return output
+
+    def power(tensor, power, TensorDataTypeWrapper):
+        """
+        Hidden function to raise a Tensor to the power of an Int/Float
+        """
+        raise NotImplementedError("Power function is not implemented yet.")
+        # Powers can either be int or float
+        if not isinstance(power, Union[int, float]):
+            raise RuntimeError("Can only raise to power of Integer/Float")
+
+        output = TensorDataTypeWrapper(data=tensor.numpy ** power)
+
+        def _backward():
+            __grad_check = Utils.checkGradDep(tensor)
+            if not __grad_check: raise RuntimeError("Cannot perform backward propagation on a Static Tensor")

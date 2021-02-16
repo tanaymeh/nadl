@@ -107,6 +107,13 @@ class Tensor:
         output = Tensor(data=self.data * scalar, _children=(self,), _op='*')
         return output
     
+    def __neg__(self):
+        """
+        Multiplies every element in the Tensor with -1
+        More fancy term: "Inverts all values in a Tensor"
+        """
+        return self * -1
+
     def __div__(self, tensor):
         raise NotImplementedError("Division Operation is currently not implemented.")
 
@@ -115,6 +122,13 @@ class Tensor:
         Only raise to scalar powers
         """
         output = HiddenOps.power(tensor=self, power=scalar, TensorDataTypeWrapper=Tensor)
+        return output
+    
+    def __sub__(self, tensor):
+        """
+        Subtraction between 2 tensors
+        """
+        output = HiddenOps.subtract(tensor1=self, tensor2=tensor, TensorDataTypeWrapper=Tensor)
         return output
     
     def relu(self):
@@ -139,7 +153,7 @@ class Tensor:
         """
         Upper-level abstraction for Tensor sum function
         """
-        output = HiddenOps.tensor_sum(tensor1=self, TensorDataTypeWrapper=Tensor)
+        output = HiddenOps.tensor_sum(tensor=self, TensorDataTypeWrapper=Tensor)
         return output
 
     def backward(self):

@@ -47,7 +47,7 @@ class HiddenOps:
         """
         Returns the sum of all elements of a Tensor in a new Tensor
         """
-        output = TensorDataTypeWrapper(data=tensor.numpy.sum())
+        output = TensorDataTypeWrapper(data=np.array(tensor.numpy.sum()))
 
         def _backward():
             __grad_check = Utils.checkGradDep(tensor)
@@ -56,6 +56,14 @@ class HiddenOps:
             tensor.grad = tensor.grad * np.ones_like(tensor.numpy)
         output._backward = _backward
 
+        return output
+
+    def subtract(tensor1, tensor2, TensorDataTypeWrapper):
+        """
+        Implementation of Subtract Function
+        """
+        output = tensor1 + (-tensor2)
+        # print(output)
         return output
 
     def power(tensor, power, TensorDataTypeWrapper):

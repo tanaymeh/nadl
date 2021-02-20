@@ -47,13 +47,13 @@ class HiddenOps:
         """
         Returns the sum of all elements of a Tensor in a new Tensor
         """
-        output = TensorDataTypeWrapper(data=np.array(tensor.numpy.sum()))
+        output = TensorDataTypeWrapper(data=np.array(tensor.data.sum()))
 
         def _backward():
             __grad_check = Utils.checkGradDep(tensor)
             if not __grad_check: raise RuntimeError("Cannot perform backward propagation on a Static Tensor")
             
-            tensor.grad = tensor.grad * np.ones_like(tensor.numpy)
+            tensor.grad = tensor.grad * np.ones_like(tensor.data)
         output._backward = _backward
 
         return output
@@ -75,7 +75,7 @@ class HiddenOps:
         if not isinstance(power, Union[int, float]):
             raise RuntimeError("Can only raise to power of Integer/Float")
 
-        output = TensorDataTypeWrapper(data=tensor.numpy ** power)
+        output = TensorDataTypeWrapper(data=tensor.data ** power)
 
         def _backward():
             __grad_check = Utils.checkGradDep(tensor)

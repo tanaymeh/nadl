@@ -52,6 +52,8 @@ class Tensor:
     def ones_like(cls, tensor):
         """
         Returns a Tensor full of Ones with the same shape as the provided tensor
+        
+        Just like np.ones_like(...) function
         """
         return cls(data=np.ones(shape=tensor.shape, dtype=tensor.dtype))
 
@@ -59,6 +61,8 @@ class Tensor:
     def zeros_like(cls, tensor):
         """
         Returns a Tensor full of Zeros with the same shape as the provided tensor
+        
+        Just like np.zeros_like(...) function
         """
         return cls(data=np.zeros(shape=tensor.shape, dtype=tensor.dtype))
     
@@ -66,6 +70,8 @@ class Tensor:
     def random_like(cls, tensor):
         """
         Returns a Tensor full of Random Numbers with the same shape as the provided tensor
+        
+        Just like np.ones_like(...) function but instead of ones, it generates random numbers
         """
         return cls(data=np.random.rand(*tensor.shape))
 
@@ -161,7 +167,9 @@ class Tensor:
         This function will perform the backward propagation
 
         Recursively visit all the nodes in the graph and then call the backward function on
-        the node which we want the gradient off.
+        the nodes.
+        
+        Topological Sort.
         """
         topology = []
         visited = set()

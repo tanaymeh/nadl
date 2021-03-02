@@ -75,6 +75,12 @@ class Tensor:
         """
         return cls(data=np.random.rand(*tensor.shape))
 
+    def zero_grad(self):
+        """
+        Zeros the currently gradients of the tensor.
+        """
+        self.grad = np.zeros_like(self.data)
+
     def __repr__(self):
         """
         Returns the string representation of a Tensor

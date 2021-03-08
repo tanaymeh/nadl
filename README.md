@@ -70,7 +70,7 @@ The above command should be executed in the repository's root directory.
 
 ## Conclusion and Collaboration
 
-I am planning on to adding more features to this little frameworks as well as optimizations and hard-coded algorithms for faster runtime.
+I am planning to add more features to this little framework as well as optimizations and hard-coded algorithms for faster runtime.
 
 I have written all this by myself (with a lot of help from from Joel Gru's Autograd and Andrey Karpathy's Micrograd) and so it's hard to push out changes fast enough or to implement new functionalities.
 

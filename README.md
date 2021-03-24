@@ -19,7 +19,7 @@ To use this framework, you currently only need to import `tensor.py` file and it
 
 ### Hardware Support
 
-I am currently contemplating the idea of using custom hardware like GPU so fasten the calculations and processing using [`pyopencl`](https://documen.tician.de/pyopencl/) but so far it's just on the white-board (yes, I use white boards).
+I am currently contemplating the idea of using custom hardware like GPU to fasten the calculations and processing using [`pyopencl`](https://documen.tician.de/pyopencl/) but so far it's just on the white-board.
 
 ## Getting Started
 

@@ -1,11 +1,11 @@
-# Naive Automatic Differentiation Library - NADL
+<h1 align='center'> Naive Automatic Differentiation Library - NADL</h1>
 
-![NADL Logo](assets/NADL.gif)
+<img src='assets/NADL.gif' align='center' alt='NADL Logo'/>
 
+<a href='https://travis-ci.com/heytanay/nadl'><img align='center' src='https://travis-ci.com/heytanay/nadl.svg?branch=main'/></a>
+<a href='https://www.python.org/'><img align='center' src='https://img.shields.io/badge/Made%20with-Python-1f425f.svg'/></a>
+<a href='https://github.com/heytanay/nadl/blob/main/LICENSE'><img align='center' src='https://img.shields.io/github/license/Naereen/StrapDown.js.svg'/></a>
 
-[![Build Status](https://travis-ci.com/heytanay/nadl.svg?branch=main)](https://travis-ci.com/heytanay/nadl)
-[![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
-[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/heytanay/nadl/blob/main/LICENSE)
 
 A little Automatic Differentiation library that I wrote in Python using only numpy that can calculate first order gradients using AD.
 

@@ -58,12 +58,11 @@ class HiddenOps:
 
         return output
 
-    def subtract(tensor1, tensor2, TensorDataTypeWrapper):
+    def subtract(tensor1, tensor2):
         """
         Implementation of Subtract Function
         """
         output = tensor1 + (-tensor2)
-        # print(output)
         return output
 
     def power(tensor, power, TensorDataTypeWrapper):

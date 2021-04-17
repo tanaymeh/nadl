@@ -1,4 +1,6 @@
 import sys
+import os
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 sys.path.append("../")
 from nadl.core.tensor import Tensor
 import unittest

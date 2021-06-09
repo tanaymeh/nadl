@@ -56,7 +56,7 @@ print(b.grad)   # In leibnitz notation: dc/db
 
 ## Testing
 
-I have added a few basic unit tests that use Tensorflow's `tf.GradientTape()` to check it the gradients being calculated by my code and those calculated by tensorflow are in the same range.
+I have added a few basic unit tests that use Tensorflow's `tf.GradientTape()` to check if the gradients being calculated by my code and those calculated by tensorflow are in the same range.
 
 Note: They cannnot be exactly same (though they are precise to 4 decimal digits) since Tensorflow is more efficient as they do all the heavy lifting using a C-backend so this is the best precision you will get from **nadl**.
 

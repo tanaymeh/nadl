@@ -9,7 +9,7 @@ class HiddenOps:
         Hidden Matrix Multiplication function that will be called in the main tensor.py file
         """
         try:
-            output = TensorDataTypeWrapper(data=np.matmul(tensor1.data, tensor2.data))
+            output = TensorDataTypeWrapper(data=np.matmul(tensor1.data, tensor2.data), _children=(tensor1, tensor2), _op='*')
         except:
             raise RuntimeError(f"Invalid Matrix Multiplication, {tensor1.data.shape} is not compatible with {tensor2.data.shape}")
 
@@ -47,7 +47,7 @@ class HiddenOps:
         """
         Returns the sum of all elements of a Tensor in a new Tensor
         """
-        output = TensorDataTypeWrapper(data=np.array(tensor.data.sum()))
+        output = TensorDataTypeWrapper(data=np.array(tensor.data.sum()), _children=(tensor))
 
         def _backward():
             __grad_check = Utils.checkGradDep(tensor)

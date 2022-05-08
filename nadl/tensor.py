@@ -1,6 +1,8 @@
 import numpy as np
-from src._tensor import CoreTensorClass
 from typing import List, NamedTuple, Callable, Optional, Union
+
+from src import utils
+from ops import opsHandler
 
 class Children(NamedTuple):
     tensor: "Tensor"
@@ -18,10 +20,11 @@ def is_array(array):
     else:
         return np.array(array)
     
-class Tensor(CoreTensorClass):
-    def __init__(self, data: Union[float, list, np.ndarray], requires_grad: bool=True, children=List[Children]=None):
+class Tensor:
+    def __init__(self, data: Union[float, list, np.ndarray], requires_grad: bool=True, device="cpu", children=List[Children]=None):
         self._data = is_array(data)
         self.requires_grad = requires_grad
+        self.device = utils.get_device(device)
         self.children = children
         self.shape = self._data.shape
         self.size = self._data.size
@@ -48,3 +51,6 @@ class Tensor(CoreTensorClass):
     
     def __repr__(self) -> str:
         return "Tensor(data={}, dtype={}, requires_grad={})".format(self.data, self.dtype, self.requires_grad)
+    
+    def __add__(self, value) -> 'Tensor':
+        return opsHandler(self, value, 'add')
